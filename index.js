@@ -21,17 +21,51 @@ let odd = [];
 let even = [];
 
 function setBank(number) {
-  //   if (typeof number !== "number") return alert("This is not a number mate!");
-  //   let bank = bank.push(number);
-  console.log("setBank was called");
+  if (!Number.isFinite(number)) return alert("This is not a number mate!");
+  bank.push(number);
+  console.log(`setBank was called bank is now ${bank}`);
 }
 
-function sort1([numbers]) {
-  console.log("Sort 1 was called");
+function displayBank(bank) {
+  const $bankDiv = document.getElementById("bankDiv");
+  $bankDiv.textContent = bank.join(" ");
 }
 
-function sortAll([numbers]) {
-  console.log("sortALL was called");
+function sort1(bank) {
+  if (bank[0] % 2 !== 0) {
+    odd.push(bank[0]);
+    bank.shift();
+    console.log(`Sort 1 was called, odd is now ${odd}`);
+  } else if (bank[0] % 2 === 0) {
+    even.push(bank[0]);
+    bank.shift();
+    console.log(`Sort 1 was called, even is now ${even}`);
+  }
+  displayBank(bank);
+}
+
+function displaySort(divID) {
+  const $oddDiv = document.getElementById("oddDiv");
+  $oddDiv.textContent = odd.join(" ");
+  const $evenDiv = document.getElementById("evenDiv");
+  $evenDiv.textContent = even.join(" ");
+}
+
+function sortAll(bank) {
+  bank.slice().forEach((number) => {
+    if (number % 2 !== 0) {
+      odd.push(number);
+      console.log(`Sort 1 was called, odd is now ${odd}`);
+    } else if (number % 2 === 0) {
+      even.push(number);
+      console.log(`Sort 1 was called, even is now ${even}`);
+    }
+  });
+  bank.length = 0;
+  displayBank(bank);
+  console.log(
+    `sortALL was called bank is now ${bank}, even is now ${even}, odd is now ${odd} `
+  );
 }
 
 function Form() {
@@ -44,26 +78,31 @@ function Form() {
 <button type="submit" data-action="sort1">Sort 1</button>
 <button type="submit" data-action="sortAll">Sort All</button>
 <h2>Bank</h2>
-    <div> numbers will be inserted here</div>
+    <div id="bankDiv"> </div>
 <h2>Odds</h2>
-    <div> numbers will be inserted here</div>
+    <div id="oddDiv"> </div>
 
 <h2>Evens</h2>
-    <div> numbers will be inserted here</div>
+    <div id="evenDiv"> </div>
     `;
   $form.addEventListener("submit", (event) => {
     event.preventDefault();
     const action = event.submitter.dataset.action;
-
     if (action === "add") {
       const data = new FormData($form);
-      const input = data.get("number");
+      const input = Number(data.get("number"));
       setBank(input);
+      displayBank(bank);
     } else if (action === "sort1") {
       sort1(bank);
+      displaySort(odd);
+      displaySort(even);
     } else if (action === "sortAll") {
       sortAll(bank);
+      displaySort(odd);
+      displaySort(even);
     }
+    $form.reset();
   });
   return $form;
 }

@@ -1,0 +1,6 @@
+#app div {
+  border: 1.5px solid #333;
+  background: transparent;
+  border-radius: 8px;
+  padding: 12px 12px;
+}
